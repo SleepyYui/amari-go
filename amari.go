@@ -110,7 +110,7 @@ func (bot *AmariBot) GetLeaderboardPage(guildID string, page int) (leaderboard *
 
 	body, _, err := bot.fetch(url)
 	if err != nil {
-		return nil, err
+		return
 	}
 
 	bot.printDebug(body)
@@ -126,7 +126,7 @@ func (bot *AmariBot) GetLeaderboardRaw(guildID string) (leaderboard *Leaderboard
 
 	body, _, err := bot.fetch(url)
 	if err != nil {
-		return nil, err
+		return
 	}
 
 	bot.printDebug(body)
@@ -142,7 +142,7 @@ func (bot *AmariBot) GetWeekly(guildID string) (weekly *Weekly, err error) {
 
 	body, _, err := bot.fetch(url)
 	if err != nil {
-		return nil, err
+		return
 	}
 
 	bot.printDebug(body)
@@ -158,7 +158,7 @@ func (bot *AmariBot) GetWeeklyRaw(guildID string) (weekly *WeeklyRaw, err error)
 
 	body, _, err := bot.fetch(url)
 	if err != nil {
-		return nil, err
+		return
 	}
 
 	bot.printDebug(body)
@@ -174,7 +174,7 @@ func (bot *AmariBot) GetGuildMember(guildID, userID string) (member *User, err e
 
 	body, _, err := bot.fetch(url)
 	if err != nil {
-		return nil, err
+		return
 	}
 
 	bot.printDebug(body)
@@ -184,15 +184,15 @@ func (bot *AmariBot) GetGuildMember(guildID, userID string) (member *User, err e
 	return
 }
 
-func (bot *AmariBot) GetGuildMembers(guildID string, members GetGuildMembers) (users []*User, err error) {
+func (bot *AmariBot) GetGuildMembers(guildID string, membersList MemberIDList) (members GetGuildMembers, err error) {
 
 	url := fmt.Sprintf("/guild/%s/members", guildID)
 
-	memberBody, err := json.Marshal(members.Members)
+	memberBody, err := json.Marshal(membersList.Members)
 
 	body, _, err := bot.fetchBody(url, memberBody)
 	if err != nil {
-		return nil, err
+		return
 	}
 
 	bot.printDebug(body)
@@ -209,7 +209,7 @@ func (bot *AmariBot) GetGuildRewards(guildID string) (rewards []*Reward, err err
 
 	body, _, err := bot.fetch(url)
 	if err != nil {
-		return nil, err
+		return
 	}
 
 	bot.printDebug(body)

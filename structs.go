@@ -79,6 +79,13 @@ type Reward struct {
 	Level  int    `json:"level"`
 }
 
+type MemberIDList struct {
+	Members []string `json:"members"`
+}
+
 type GetGuildMembers struct {
-	Members []*string
+	GuildID        string  `json:"guild"`
+	Members        []*User `json:"members"`
+	TotalMembers   int     `json:"total_members"`
+	QueriedMembers int     `json:"queried_members"`
 }
