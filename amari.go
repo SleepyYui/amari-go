@@ -54,7 +54,7 @@ func (bot *AmariBot) fetch(url string, target interface{}) (body []byte, err err
 	return
 }
 
-func (bot *AmariBot) getLeaderboardPage(guildID string, page int) (leaderboard *Leaderboard, err error) {
+func (bot *AmariBot) GetLeaderboardPage(guildID string, page int) (leaderboard *Leaderboard, err error) {
 
 	url := fmt.Sprintf("%s/guilds/%s/leaderboard?page=%d", bot.BaseURL, guildID, page)
 
