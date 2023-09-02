@@ -78,3 +78,7 @@ type Reward struct {
 	RoleID string `json:"role_id"`
 	Level  int    `json:"level"`
 }
+
+type GetGuildMembers struct {
+	Members []*string
+}
