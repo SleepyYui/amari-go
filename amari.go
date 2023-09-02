@@ -20,16 +20,24 @@ func New(token string) *AmariBot {
 		Version: version,
 	}
 
+	_, resp, err := bot.fetch("/guilds/1/leaderboard")
+	if resp.StatusCode == 403 {
+		panic("Invalid API key")
+	} else if err != nil {
+		panic(err)
+	}
+
 	return bot
 }
 
 func (bot *AmariBot) printDebug(data interface{}) {
 	if bot.Debug {
-		fmt.Println(data)
+		fmt.Println(fmt.Sprintf("%v", data))
 	}
 }
 
-func (bot *AmariBot) fetch(url string, target interface{}) (body []byte, err error) {
+func (bot *AmariBot) fetch(url string) (body []byte, resp *http.Response, err error) {
+	url = fmt.Sprintf("%s/%s", bot.BaseURL, url)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return
@@ -38,7 +46,7 @@ func (bot *AmariBot) fetch(url string, target interface{}) (body []byte, err err
 	req.Header.Set("Authorization", bot.ApiKey)
 	req.Header.Set("User-Agent", fmt.Sprintf("amarigo/%s", bot.Version))
 
-	resp, err := client.Do(req)
+	resp, err = client.Do(req)
 	if err != nil {
 		return
 	}
@@ -56,9 +64,9 @@ func (bot *AmariBot) fetch(url string, target interface{}) (body []byte, err err
 
 func (bot *AmariBot) GetLeaderboardPage(guildID string, page int) (leaderboard *Leaderboard, err error) {
 
-	url := fmt.Sprintf("%s/guilds/%s/leaderboard?page=%d", bot.BaseURL, guildID, page)
+	url := fmt.Sprintf("/guilds/%s/leaderboard?page=%d", guildID, page)
 
-	body, err := bot.fetch(url, &leaderboard)
+	body, _, err := bot.fetch(url)
 	if err != nil {
 		return nil, err
 	}
