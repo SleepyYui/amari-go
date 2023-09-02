@@ -26,9 +26,14 @@ type RequestHandler struct {
 }
 
 type Leaderboard struct {
-	Data  []LeaderboardUser `json:"current_page"`
-	Count int               `json:"count"`
-	Total int               `json:"total_count"`
+	Users []*LeaderboardUser `json:"data"`
+	Count int                `json:"count"`
+	Total int                `json:"total_count"`
+}
+
+type LeaderboardRaw struct {
+	Users []*LeaderboardUser `json:"data"`
+	Count int                `json:"count"`
 }
 
 type LeaderboardUser struct {
@@ -37,4 +42,39 @@ type LeaderboardUser struct {
 	Exp       int    `json:"exp"`
 	Level     int    `json:"level"`
 	WeeklyExp int    `json:"weeklyExp"`
+}
+
+type Weekly struct {
+	Users []*WeeklyUser `json:"data"`
+	Count int           `json:"count"`
+	Total int           `json:"total_count"`
+}
+
+type WeeklyRaw struct {
+	Users []*WeeklyUser `json:"data"`
+	Count int           `json:"count"`
+}
+
+type WeeklyUser struct {
+	ID       string `json:"id"`
+	Username string `json:"username"`
+	Exp      int    `json:"exp"`
+}
+
+type User struct {
+	ID        string `json:"id"`
+	Username  string `json:"username"`
+	Exp       int    `json:"exp"`
+	Level     int    `json:"level"`
+	WeeklyExp int    `json:"weeklyExp"`
+}
+
+type Rewards struct {
+	Rewards []*Reward `json:"data"`
+	Count   int       `json:"count"`
+}
+
+type Reward struct {
+	RoleID string `json:"role_id"`
+	Level  int    `json:"level"`
 }
