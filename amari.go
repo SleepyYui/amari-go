@@ -70,20 +70,21 @@ func (bot *AmariBot) fetch(url string) (body []byte, resp *http.Response, err er
 	return
 }
 
-func (bot *AmariBot) fetchBody(url string, inputBody []byte) (body []byte, resp *http.Response, err error) {
+func (bot *AmariBot) postBody(url string, inputBody []byte) (body []byte, resp *http.Response, err error) {
 	url = fmt.Sprintf("%s%s", bot.BaseURL, url)
 
 	bot.printDebug(url)
 
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(inputBody))
 	if err != nil {
 		return
 	}
 
+	bot.printDebug(string(inputBody))
+
 	req.Header.Set("Authorization", bot.ApiKey)
 	req.Header.Set("User-Agent", fmt.Sprintf("amarigo/%s", bot.Version))
-
-	req.Body = io.NopCloser(bytes.NewReader(inputBody))
+	req.Header.Set("Content-Type", "application/json")
 
 	resp, err = client.Do(req)
 	if err != nil {
@@ -184,13 +185,13 @@ func (bot *AmariBot) GetGuildMember(guildID, userID string) (member *User, err e
 	return
 }
 
-func (bot *AmariBot) GetGuildMembers(guildID string, membersList MemberIDList) (members GetGuildMembers, err error) {
+func (bot *AmariBot) GetGuildMembers(guildID string, membersList []string) (members GetGuildMembers, err error) {
 
 	url := fmt.Sprintf("/guild/%s/members", guildID)
 
-	memberBody, err := json.Marshal(membersList.Members)
+	memberBody, err := json.Marshal(MemberIDList{Members: membersList})
 
-	body, _, err := bot.fetchBody(url, memberBody)
+	body, _, err := bot.postBody(url, memberBody)
 	if err != nil {
 		return
 	}
